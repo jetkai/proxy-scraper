@@ -47,7 +47,7 @@ class Main {
         for(website in PluginFactory.proxyWebsites) {
             val websiteProxies = website.proxies.distinctBy { it.values() }.toMutableList()
             for(proxy in websiteProxies) {
-                when (proxy.type) {
+                when (proxy.protocol) {
                     "HTTP" -> { proxyList.http.add(proxy.ip + ":" + proxy.port) }
                     "HTTPS" -> { proxyList.https.add(proxy.ip + ":" + proxy.port) }
                     "SOCKS4" -> { proxyList.socks4.add(proxy.ip + ":" + proxy.port) }

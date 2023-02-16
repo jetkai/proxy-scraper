@@ -1,7 +1,5 @@
 package scraper.plugin.hook
 
-import java.net.http.HttpResponse
-
 interface ProxyWebsite {
 
     val proxies : MutableList<ProxyData>
@@ -10,7 +8,7 @@ interface ProxyWebsite {
 
     fun thenConnect()
 
-    fun thenHandleData(data : MutableMap<String, HttpResponse<String>>)
+    fun thenHandleData(data : MutableMap<String, *>)
 
     fun finallyComplete()
 

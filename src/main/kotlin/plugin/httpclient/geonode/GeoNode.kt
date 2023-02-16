@@ -14,7 +14,7 @@ import scraper.plugin.hook.ProxyWebsite
 import java.net.http.HttpResponse
 
 /**
- * Geonode - 16/02/2023
+ * GeoNode - 16/02/2023
  * @author Kai
  *
  * Description: Grabs 2000 proxies (HTTP, HTTPS, SOCKS4 & SOCKS5)
@@ -61,7 +61,7 @@ import java.net.http.HttpResponse
  *   ]
  * }
  */
-class Geonode : Plugin, ProxyWebsite {
+class GeoNode : Plugin, ProxyWebsite {
 
     private val endpointUrls = mapOf(
         "HTTP" to "https://proxylist.geonode.com/api/proxy-list?limit=500&sort_by=lastChecked&sort_type=desc&filterUpTime=90&protocols=http",
@@ -104,13 +104,16 @@ class Geonode : Plugin, ProxyWebsite {
         this.thenHandleData(responses)
     }
 
-    override fun thenHandleData(data : MutableMap<String, HttpResponse<String>>) {
+    override fun thenHandleData(data : MutableMap<String, *>) {
         logger.info { "Handling Data" }
 
         for(entry in data.entries.iterator()) {
-            val json = entry.value.body()
+            if (entry.value !is HttpResponse<*>) {
+                continue
+            }
+            val json = (entry.value as HttpResponse<String>).body()
             val mapper = ObjectMapper()
-            val geonodeArray = mapper.readValue<GeonodeData>(json)
+            val geonodeArray = mapper.readValue<GeoNodeData>(json)
             geonodeArray.data
                 .filterNot { it.protocols.isEmpty() }
                 .mapTo(proxies) { ProxyData(it.host, it.port, it.protocols[0]) }

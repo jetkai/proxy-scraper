@@ -71,20 +71,22 @@ class ProxyScrape : Plugin, ProxyWebsite {
         this.thenHandleData(responses)
     }
 
-    override fun thenHandleData(data : MutableMap<String, HttpResponse<String>>) {
+    override fun thenHandleData(data : MutableMap<String, *>) {
         logger.info { "Handling Data" }
 
         for(entry in data.entries.iterator()) {
             val type = entry.key
-            val proxyIpPortArray = entry.value.body().split("\r")
-            for(proxyIpPort in proxyIpPortArray) {
-                if(!proxyIpPort.contains(":")) {
-                    continue
+            if(entry.value is HttpResponse<*>) {
+                val proxyIpPortArray = (entry.value as HttpResponse<String>).body().split("\r")
+                for (proxyIpPort in proxyIpPortArray) {
+                    if (!proxyIpPort.contains(":")) {
+                        continue
+                    }
+                    val ip = proxyIpPort.split(":")[0]
+                    val port = proxyIpPort.split(":")[1]
+                    val proxy = ProxyData(ip, port.toInt(), type)
+                    proxies.add(proxy)
                 }
-                val ip = proxyIpPort.split(":")[0]
-                val port = proxyIpPort.split(":")[1]
-                val proxy = ProxyData(ip, port.toInt(), type)
-                proxies.add(proxy)
             }
 
         }

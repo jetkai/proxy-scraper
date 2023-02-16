@@ -8,12 +8,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize
-data class GeonodeData(@JsonProperty("data") val data : List<GeonodeDataArray>)
+data class GeoNodeData(@JsonProperty("data") val data : List<GeoNodeDataArray>)
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize
-data class GeonodeDataArray(
+data class GeoNodeDataArray(
     @JsonProperty("ip")
     val host : String,
     @JsonProperty("port")

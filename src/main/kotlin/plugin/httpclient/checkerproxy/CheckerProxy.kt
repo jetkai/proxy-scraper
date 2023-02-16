@@ -1,4 +1,4 @@
-package plugin.httpclient.freeproxyapi
+package plugin.httpclient.checkerproxy
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -12,30 +12,25 @@ import scraper.plugin.PluginFactory
 import scraper.plugin.hook.ProxyData
 import scraper.plugin.hook.ProxyWebsite
 import java.net.http.HttpResponse
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
- * GeoNode - 11/02/2023
+ * CheckerProxy - 16/02/2023
  * @author Kai
  *
- * Source: https://freeproxyapi.com/
- * Endpoint: https://public.freeproxyapi.com/api/Download/Json
- * Method: POST
+ * Source: https://checkerproxy.net/
+ * Endpoint: https://checkerproxy.net/api/archive/yyyy-MM-dd
+ * Method: GET
  *
  * ContentType: JSON
- * Format:
- * [
- *   {
- *     "Host": "39.104.62.128",
- *     "Port": 8123,
- *     "Type": 2,
- *     "ProxyLevel": 1
- *   }
- * ]
  */
-class FreeProxyApi : Plugin, ProxyWebsite {
+class CheckerProxy : Plugin, ProxyWebsite {
 
-    private val endpointUrl = "https://public.freeproxyapi.com/api/Download/Json"
-    private val postData = "{\"types\":[],\"levels\":[],\"countries\":[],\"type\":\"json\",\"resultModel\":\"Mini\"}"
+    private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val currentDate = LocalDateTime.now().format(dateFormat)
+
+    private val endpointUrl = "https://checkerproxy.net/api/archive/$currentDate"
 
     private val logger = KotlinLogging.logger { }
 
@@ -62,7 +57,7 @@ class FreeProxyApi : Plugin, ProxyWebsite {
             val result = async(Dispatchers.IO) {
                 val client = CoroutinesHttpClient()
                 client.contentType = arrayOf("content-type",  "application/json")
-                val data = client.fetch(endpointUrl, postData)
+                val data = client.fetch(endpointUrl, null)
                 data
             }
             response["json"] = result.await()
@@ -79,20 +74,21 @@ class FreeProxyApi : Plugin, ProxyWebsite {
         logger.info { "Handling Data" }
 
         val mapper = ObjectMapper()
-        val values = mapper.readValue<List<FreeProxyApiData>>((data.getValue("json") as HttpResponse<String>).body())
-        for(value in values) {
-            val protocol : String = when (value.protocolAsInt) {
-                1 -> "SOCKS4"
-                2 -> "SOCKS5"
-                3 -> "HTTP"
-                4 -> "HTTPS"
-                else -> null
+        val proxyList = mapper.readValue<List<CheckerProxyData>>((data.getValue("json") as HttpResponse<String>).body())
+        for(proxy in proxyList) {
+            if(proxy.host.isEmpty() || !proxy.host.contains(":")) {
+                continue
+            }
+            val ip = proxy.host.split(":")[0]
+            val port = proxy.host.split(":")[1].toInt()
+            val protocol : String = when (proxy.protocolAsInt) {
+                1 -> { "HTTP" }
+                2 -> { "HTTPS" }
+                4 -> { "SOCKS5" }
+                else -> { null }
             } ?: continue
-
-            val proxy = ProxyData(value.host, value.port, protocol)
-            proxies.add(proxy)
+            proxies.add(ProxyData(ip, port, protocol))
         }
-
         //Go Next
         this.finallyComplete()
     }

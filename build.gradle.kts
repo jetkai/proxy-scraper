@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.8.0"
+    kotlin("jvm") version "1.8.10"
 }
 
 group = "scraper"
@@ -16,7 +16,8 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
 
     //Emulate Web Browser - Some proxy sites require JavaScript
-    implementation("org.seleniumhq.selenium:selenium-firefox-driver:4.8.0")
+    implementation("org.seleniumhq.selenium:selenium-chrome-driver:4.8.0")
+    implementation("org.seleniumhq.selenium:selenium-devtools-v109:4.8.0")
 
     //Reflection for Plugins
     implementation("org.reflections:reflections:0.10.2")
