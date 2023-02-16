@@ -10,11 +10,10 @@ repositories {
 }
 
 dependencies {
+    //Jackson - Serialize/Deserialize
+    implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.14.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.14.2")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformats-text:2.14.2")
 
     //Emulate Web Browser - Some proxy sites require JavaScript
     implementation("org.seleniumhq.selenium:selenium-firefox-driver:4.8.0")
@@ -28,8 +27,6 @@ dependencies {
     //Logging
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("ch.qos.logback:logback-classic:1.4.5")
-
-    testImplementation(kotlin("test"))
 }
 
 tasks.test {

@@ -8,7 +8,7 @@ data class FreeProxyApiData(
     @JsonProperty("Port")
     val port : Int,
     @JsonProperty("Type")
-    val type : Int,
+    val protocolAsInt : Int,
     @JsonProperty("ProxyLevel")
     val proxyLevel : Int
 )

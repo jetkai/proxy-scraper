@@ -14,7 +14,7 @@ import scraper.plugin.hook.ProxyWebsite
 import java.net.http.HttpResponse
 
 /**
- * FreeProxyApi - 11/02/2023
+ * Geonode - 11/02/2023
  * @author Kai
  *
  * Source: https://freeproxyapi.com/
@@ -82,7 +82,7 @@ class FreeProxyApi : Plugin, ProxyWebsite {
         val values = mapper.readValue<List<FreeProxyApiData>>(data.getValue("json").body())
 
         for(value in values) {
-            val type : String = when (value.type) {
+            val protocol : String = when (value.protocolAsInt) {
                 1 -> "SOCKS4"
                 2 -> "SOCKS5"
                 3 -> "HTTP"
@@ -90,7 +90,7 @@ class FreeProxyApi : Plugin, ProxyWebsite {
                 else -> null
             } ?: continue
 
-            val proxy = ProxyData(value.host, value.port, type)
+            val proxy = ProxyData(value.host, value.port, protocol)
             proxies.add(proxy)
         }
 
