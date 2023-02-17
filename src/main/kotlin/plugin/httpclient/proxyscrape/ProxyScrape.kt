@@ -52,8 +52,12 @@ class ProxyScrape : Plugin, ProxyWebsite {
     override fun initialize() : Boolean {
         logger.info { "Initializing" }
 
-        //Go Next
-        this.thenConnect()
+        try {
+            this.thenConnect()
+        } catch (ex : Exception) {
+            completed = true
+            logger.error { ex.message }
+        }
 
         return false
     }
