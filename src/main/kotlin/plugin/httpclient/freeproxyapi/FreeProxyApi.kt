@@ -32,6 +32,7 @@ import java.net.http.HttpResponse
  *   }
  * ]
  */
+@Suppress("unused")
 class FreeProxyApi : Plugin, ProxyWebsite {
 
     private val endpointUrl = "https://public.freeproxyapi.com/api/Download/Json"
@@ -40,6 +41,8 @@ class FreeProxyApi : Plugin, ProxyWebsite {
     private val logger = KotlinLogging.logger { }
 
     override val proxies : MutableList<ProxyData> = mutableListOf()
+
+    private var completed : Boolean = false
 
     override fun register() {
         PluginFactory.register(this)
@@ -93,12 +96,13 @@ class FreeProxyApi : Plugin, ProxyWebsite {
             proxies.add(proxy)
         }
 
-        //Go Next
+        logger.info { "Collected ${proxies.size} proxies" }
+        completed = true
         this.finallyComplete()
     }
 
-    override fun finallyComplete() {
-        logger.info { "Collected ${proxies.size} proxies" }
+    override fun finallyComplete() : Boolean {
+        return completed
     }
 
 }

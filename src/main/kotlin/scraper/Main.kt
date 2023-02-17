@@ -1,14 +1,18 @@
 package scraper
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import mu.KotlinLogging
 import scraper.plugin.PluginFactory
 import scraper.plugin.hook.ProxyOutputData
+import scraper.threadding.ScraperExecutor
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.system.exitProcess
 
 class Main {
+
+    private val logger = KotlinLogging.logger { }
 
     companion object {
         var outputPath = Path.of("proxies")
@@ -24,7 +28,13 @@ class Main {
     fun init() {
         PluginFactory.init()
         for(proxy in PluginFactory.proxyWebsites) {
-            proxy.initialize()
+            ScraperExecutor.submitTask(proxy::initialize)
+        }
+        val websitesLength = PluginFactory.proxyWebsites.size
+        while(PluginFactory.proxyWebsites.count { it.finallyComplete() } != websitesLength) {
+            val sites = PluginFactory.proxyWebsites.count { it.finallyComplete() }
+            logger.info { "Scraped [$sites/${PluginFactory.proxyWebsites.size}] sites, waiting on remaining sites..." }
+            Thread.sleep(1000L)
         }
         output()
         exitProcess(0)

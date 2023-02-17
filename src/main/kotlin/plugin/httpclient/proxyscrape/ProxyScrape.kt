@@ -9,7 +9,7 @@ import scraper.plugin.Plugin
 import scraper.plugin.PluginFactory
 import scraper.plugin.hook.ProxyData
 import scraper.plugin.hook.ProxyWebsite
-import scraper.scripts.Utils
+import scraper.util.NetworkUtils
 import java.net.http.HttpResponse
 
 /**
@@ -29,6 +29,7 @@ import java.net.http.HttpResponse
  * 127.0.0.1:80
  * 127.0.0.2:8080
  */
+@Suppress("unused")
 class ProxyScrape : Plugin, ProxyWebsite {
 
     private val endpointUrls = mapOf(
@@ -41,6 +42,8 @@ class ProxyScrape : Plugin, ProxyWebsite {
     private val logger = KotlinLogging.logger { }
 
     override val proxies : MutableList<ProxyData> = mutableListOf()
+
+    private var completed : Boolean = false
 
     override fun register() {
         PluginFactory.register(this)
@@ -80,7 +83,7 @@ class ProxyScrape : Plugin, ProxyWebsite {
             if(entry.value is HttpResponse<*>) {
                 val proxyIpPortArray = (entry.value as HttpResponse<String>).body().split("\r\n")
                 for (proxyIpPort in proxyIpPortArray) {
-                    if(!Utils.isValidIpAndPort(proxyIpPort)) {
+                    if(!NetworkUtils.isValidIpAndPort(proxyIpPort)) {
                         continue
                     }
                     val ip = proxyIpPort.split(":")[0]
@@ -92,13 +95,13 @@ class ProxyScrape : Plugin, ProxyWebsite {
 
         }
 
-        //Go Next
+        logger.info { "Collected ${proxies.size} proxies" }
+        completed = true
         this.finallyComplete()
     }
 
-    override fun finallyComplete() {
-        logger.info { "Finalizing" }
-        logger.info { "Collected ${proxies.size} proxies" }
+    override fun finallyComplete() : Boolean {
+        return completed
     }
 
 }

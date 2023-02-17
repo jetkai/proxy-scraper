@@ -10,6 +10,6 @@ interface ProxyWebsite {
 
     fun thenHandleData(data : MutableMap<String, *>)
 
-    fun finallyComplete()
+    fun finallyComplete() : Boolean = false
 
 }

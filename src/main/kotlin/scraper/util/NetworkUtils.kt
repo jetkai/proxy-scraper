@@ -1,8 +1,8 @@
-package scraper.scripts
+package scraper.util
 
 import java.util.regex.Pattern
 
-object Utils {
+object NetworkUtils {
 
     fun isValidIpAddress(ipAddress : String) : Boolean {
         val pattern = Pattern.compile("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}\$")

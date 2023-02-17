@@ -61,6 +61,7 @@ import java.net.http.HttpResponse
  *   ]
  * }
  */
+@Suppress("unused")
 class GeoNode : Plugin, ProxyWebsite {
 
     private val endpointUrls = mapOf(
@@ -73,6 +74,8 @@ class GeoNode : Plugin, ProxyWebsite {
     private val logger = KotlinLogging.logger { }
 
     override val proxies : MutableList<ProxyData> = mutableListOf()
+
+    private var completed : Boolean = false
 
     override fun register() {
         PluginFactory.register(this)
@@ -119,13 +122,13 @@ class GeoNode : Plugin, ProxyWebsite {
                 .mapTo(proxies) { ProxyData(it.host, it.port, it.protocols[0]) }
         }
 
-        //Go Next
+        logger.info { "Collected ${proxies.size} proxies" }
+        completed = true
         this.finallyComplete()
     }
 
-    override fun finallyComplete() {
-        logger.info { "Finalizing" }
-        logger.info { "Collected ${proxies.size} proxies" }
+    override fun finallyComplete() : Boolean {
+        return completed
     }
 
 }

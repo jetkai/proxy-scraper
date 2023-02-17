@@ -25,10 +25,10 @@ object PluginFactory {
                 instance.register()
                 plugins[classz.name] = instance
             } catch (t : Throwable) {
-                logger.error {"Failed to initialize plugin: ${classz.simpleName}." }
+                logger.error {"Failed to initialize website plugin: ${classz.simpleName}." }
             }
         }
-        logger.info { "Loaded " + plugins.size + " plugins." }
+        logger.info { "Loaded " + plugins.size + " website plugins." }
     }
 
     fun register(proxyWebsite : ProxyWebsite) {

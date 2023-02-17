@@ -11,7 +11,7 @@ import scraper.plugin.Plugin
 import scraper.plugin.PluginFactory
 import scraper.plugin.hook.ProxyData
 import scraper.plugin.hook.ProxyWebsite
-import scraper.scripts.Utils
+import scraper.util.NetworkUtils
 import java.net.http.HttpResponse
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter
  *
  * ContentType: JSON
  */
+@Suppress("unused")
 class CheckerProxy : Plugin, ProxyWebsite {
 
     private val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -36,6 +37,8 @@ class CheckerProxy : Plugin, ProxyWebsite {
     private val logger = KotlinLogging.logger { }
 
     override val proxies : MutableList<ProxyData> = mutableListOf()
+
+    private var completed : Boolean = false
 
     override fun register() {
         PluginFactory.register(this)
@@ -77,7 +80,7 @@ class CheckerProxy : Plugin, ProxyWebsite {
         val mapper = ObjectMapper()
         val proxyList = mapper.readValue<List<CheckerProxyData>>((data.getValue("json") as HttpResponse<String>).body())
         for(proxy in proxyList) {
-            if(!Utils.isValidIpAndPort(proxy.host)) {
+            if(!NetworkUtils.isValidIpAndPort(proxy.host)) {
                 continue
             }
             val ip = proxy.host.split(":")[0]
@@ -90,12 +93,14 @@ class CheckerProxy : Plugin, ProxyWebsite {
             } ?: continue
             proxies.add(ProxyData(ip, port, protocol))
         }
-        //Go Next
+
+        logger.info { "Collected ${proxies.size} proxies" }
+        completed = true
         this.finallyComplete()
     }
 
-    override fun finallyComplete() {
-        logger.info { "Collected ${proxies.size} proxies" }
+    override fun finallyComplete() : Boolean {
+        return completed
     }
 
 }
