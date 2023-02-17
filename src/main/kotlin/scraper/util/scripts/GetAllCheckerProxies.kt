@@ -18,6 +18,12 @@ import java.time.format.DateTimeFormatter
 import kotlin.io.path.exists
 import kotlin.system.exitProcess
 
+/**
+ * GetAllCheckerProxies - 17/02/2023
+ * @author Kai
+ *
+ * Description: Quick and easy script for getting all the proxies from CheckerProxy's API
+ **/
 private const val endpoint = "https://checkerproxy.net/api/archive/"
 
 private val proxies : MutableList<ProxyData> = mutableListOf()
@@ -26,7 +32,7 @@ fun main() {
     loopThroughDates()
 }
 
-fun loopThroughDates() {
+private fun loopThroughDates() {
     val format = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val fromDate = LocalDate.parse("2023-01-18", format)
     val toDate = LocalDate.parse("2023-02-17", format)

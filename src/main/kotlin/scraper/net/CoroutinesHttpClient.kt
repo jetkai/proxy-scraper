@@ -9,14 +9,21 @@ import java.net.http.HttpResponse
 import java.net.http.HttpTimeoutException
 import java.time.Duration
 
-
+/**
+ * CoroutinesHttpClient - 12/02/2023
+ * @author Kai
+ *
+ * Description: Used for simple web calls, such as sending GET/POST data for text content (JSON etc)
+ **/
 class CoroutinesHttpClient {
 
     companion object {
 
+        val timeout : Duration = Duration.ofSeconds(15)
+
         private val httpClient : HttpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
-            .connectTimeout(Duration.ofSeconds(30))
+            .version(HttpClient.Version.HTTP_2)
+            .connectTimeout(timeout)
             .build()
 
     }
@@ -31,7 +38,7 @@ class CoroutinesHttpClient {
         val request : HttpRequest = if(postData == null) {
             HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .timeout(Duration.ofSeconds(30))
+                .timeout(timeout)
                 .headers(*userAgent)
                 .headers(*accept)
                 .headers(*acceptLanguage)
@@ -42,7 +49,7 @@ class CoroutinesHttpClient {
         } else {
             HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .timeout(Duration.ofSeconds(30))
+                .timeout(timeout)
                 .headers(*userAgent)
                 .headers(*accept)
                 .headers(*acceptLanguage)

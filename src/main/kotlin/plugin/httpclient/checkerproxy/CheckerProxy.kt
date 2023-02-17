@@ -54,7 +54,7 @@ class CheckerProxy : Plugin, ProxyWebsite {
             logger.error { ex.message }
         }
 
-        return false
+        return true
     }
 
     override fun thenConnect() {

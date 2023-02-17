@@ -5,6 +5,13 @@ import org.reflections.Reflections
 import scraper.plugin.hook.ProxyWebsite
 import java.lang.reflect.Modifier
 
+/**
+ * PluginFactory - 12/02/2023
+ * @author Kai
+ *
+ * Description: This is used for loading the Proxy Website Plugins from /src/main/kotlin/plugins/
+ * Makes it easier for APIs to be added / removed
+ **/
 object PluginFactory {
 
     private val logger = KotlinLogging.logger { }

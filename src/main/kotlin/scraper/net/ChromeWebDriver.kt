@@ -12,6 +12,12 @@ import org.openqa.selenium.devtools.Command
 import org.openqa.selenium.devtools.DevTools
 import org.openqa.selenium.devtools.v109.network.Network
 
+/**
+ * ChromeWebDriver - 12/02/2023
+ * @author Kai
+ *
+ * Description: Used for more complex proxy sites, ones that require JavaScript & obfuscate their data
+ **/
 class ChromeWebDriver {
 
     private val options = ChromeOptions()

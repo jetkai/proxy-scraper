@@ -2,6 +2,12 @@ package scraper.util
 
 import java.util.regex.Pattern
 
+/**
+ * NetworkUtils - 17/02/2023
+ * @author Kai
+ *
+ * Description: Any reusable network functions are in this class
+ **/
 object NetworkUtils {
 
     fun isValidIpAddress(ipAddress : String) : Boolean {

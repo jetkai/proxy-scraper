@@ -10,6 +10,12 @@ import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.system.exitProcess
 
+/**
+ * Main - 12/02/2023
+ * @author Kai
+ *
+ * Description: Main class, runs the application
+ **/
 class Main {
 
     private val logger = KotlinLogging.logger { }
