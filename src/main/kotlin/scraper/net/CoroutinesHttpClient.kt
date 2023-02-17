@@ -6,6 +6,7 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.net.http.HttpTimeoutException
 import java.time.Duration
 
 
@@ -14,8 +15,8 @@ class CoroutinesHttpClient {
     companion object {
 
         private val httpClient : HttpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_2)
-            .connectTimeout(Duration.ofSeconds(15))
+            .version(HttpClient.Version.HTTP_1_1)
+            .connectTimeout(Duration.ofSeconds(30))
             .build()
 
     }
@@ -26,11 +27,11 @@ class CoroutinesHttpClient {
     var acceptEncoding = arrayOf("accept-encoding", "text/plain; charset=UTF-8")
     var contentType = arrayOf("content-type", "text/plain; charset=UTF-8")
 
-    suspend fun fetch(url : String, postData : String?) : HttpResponse<String> {
+    suspend fun fetch(url : String, postData : String?) : HttpResponse<String>? {
         val request : HttpRequest = if(postData == null) {
             HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .timeout(Duration.ofSeconds(15))
+                .timeout(Duration.ofSeconds(30))
                 .headers(*userAgent)
                 .headers(*accept)
                 .headers(*acceptLanguage)
@@ -41,7 +42,7 @@ class CoroutinesHttpClient {
         } else {
             HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .timeout(Duration.ofSeconds(15))
+                .timeout(Duration.ofSeconds(30))
                 .headers(*userAgent)
                 .headers(*accept)
                 .headers(*acceptLanguage)
@@ -52,7 +53,11 @@ class CoroutinesHttpClient {
         }
         val response = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
         return withContext(Dispatchers.IO) {
-            response.get()
+            try {
+                response.get()
+            } catch (timeout : HttpTimeoutException) {
+                null
+            }
         }
     }
 

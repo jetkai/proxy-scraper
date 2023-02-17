@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.10"
+    id("edu.sc.seis.launch4j") version "2.5.4"
 }
 
 group = "scraper"
@@ -34,6 +35,21 @@ tasks.test {
     useJUnitPlatform()
 }
 
+launch4j {
+    mainClassName = "scraper.Main"
+    headerType = "console"
+    bundledJrePath = "jre11"
+    bundledJre64Bit = true
+    fileDescription = "Proxy Scraping Tool - https://github.com/jetkai/proxy-scraper"
+    productName = "Proxy Scraper"
+    copyright = "MIT License"
+    companyName = "jetkai"
+    version = "1.0"
+    textVersion = "1.0"
+    language = "ENGLISH_UK"
+    //icon = "${projectDir}/icons/myApp.ico"
+}
+
 lateinit var jarFile: File
 
 tasks.withType<Jar> {
@@ -55,5 +71,5 @@ tasks.withType<Jar> {
 }
 
 kotlin {
-    jvmToolchain(18)
+    jvmToolchain(11)
 }

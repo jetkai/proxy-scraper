@@ -22,7 +22,7 @@ object PluginFactory {
             }
             try {
                 val instance: Plugin = classz.getDeclaredConstructor().newInstance()
-                instance.init()
+                instance.register()
                 plugins[classz.name] = instance
             } catch (t : Throwable) {
                 logger.error {"Failed to initialize plugin: ${classz.simpleName}." }

@@ -36,7 +36,7 @@ class CheckerProxy : Plugin, ProxyWebsite {
 
     override val proxies : MutableList<ProxyData> = mutableListOf()
 
-    override fun init() {
+    override fun register() {
         PluginFactory.register(this)
     }
 
@@ -52,7 +52,7 @@ class CheckerProxy : Plugin, ProxyWebsite {
     override fun thenConnect() {
         logger.info { "Connecting" }
 
-        val response = mutableMapOf<String, HttpResponse<String>>()
+        val response = mutableMapOf<String, HttpResponse<String>?>()
         runBlocking {
             val result = async(Dispatchers.IO) {
                 val client = CoroutinesHttpClient()

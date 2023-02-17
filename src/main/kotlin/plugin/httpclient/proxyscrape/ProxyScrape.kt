@@ -41,7 +41,7 @@ class ProxyScrape : Plugin, ProxyWebsite {
 
     override val proxies : MutableList<ProxyData> = mutableListOf()
 
-    override fun init() {
+    override fun register() {
         PluginFactory.register(this)
     }
 
@@ -57,7 +57,7 @@ class ProxyScrape : Plugin, ProxyWebsite {
     override fun thenConnect() {
         logger.info { "Connecting" }
 
-        val responses = mutableMapOf<String, HttpResponse<String>>()
+        val responses = mutableMapOf<String, HttpResponse<String>?>()
         for (endpointEntry in endpointUrls.entries.iterator()) {
             runBlocking {
                 val result = async(Dispatchers.IO) {
