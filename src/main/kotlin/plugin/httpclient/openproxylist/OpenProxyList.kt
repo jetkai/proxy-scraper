@@ -1,4 +1,4 @@
-package plugin.httpclient.proxyscrape
+package plugin.httpclient.openproxylist
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -13,15 +13,14 @@ import scraper.scripts.Utils
 import java.net.http.HttpResponse
 
 /**
- * ProxyScrape - 12/02/2023
+ * OpenProxyList - 17/02/2023
  * @author Kai
  *
- * Source: https://proxyscrape.com/
- * Endpoint (HTTP): https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=10000
- * Endpoint (HTTPS): https://api.proxyscrape.com/v2/?request=displayproxies&protocol=https&timeout=10000
- * Endpoint (SOCKS4): https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks4&timeout=10000
- * Endpoint (SOCKS5): https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5&timeout=10000
- * Endpoint (ALL): https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http,https,socks4,socks5&timeout=10000
+ * Source: https://openproxylist.xyz/
+ * Endpoint (HTTP): https://openproxylist.xyz/http.txt
+ * Endpoint (SOCKS4): https://openproxylist.xyz/socks4.txt
+ * Endpoint (SOCKS5): https://openproxylist.xyz/socks5.txt
+ * Endpoint (ALL): https://openproxylist.xyz/all.txt
  * Method: GET
  *
  * ContentType: Plain-Text
@@ -29,13 +28,12 @@ import java.net.http.HttpResponse
  * 127.0.0.1:80
  * 127.0.0.2:8080
  */
-class ProxyScrape : Plugin, ProxyWebsite {
+class OpenProxyList : Plugin, ProxyWebsite {
 
     private val endpointUrls = mapOf(
-        "HTTP" to "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=10000",
-        "HTTPS" to "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=https&timeout=10000",
-        "SOCKS4" to "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks4&timeout=10000",
-        "SOCKS5" to "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5&timeout=10000"
+        "HTTP" to "https://openproxylist.xyz/http.txt",
+        "SOCKS4" to "https://openproxylist.xyz/socks4.txt",
+        "SOCKS5" to "https://openproxylist.xyz/socks5.txt"
     )
 
     private val logger = KotlinLogging.logger { }
@@ -78,7 +76,7 @@ class ProxyScrape : Plugin, ProxyWebsite {
         for(entry in data.entries.iterator()) {
             val type = entry.key
             if(entry.value is HttpResponse<*>) {
-                val proxyIpPortArray = (entry.value as HttpResponse<String>).body().split("\r\n")
+                val proxyIpPortArray = (entry.value as HttpResponse<String>).body().split("\n")
                 for (proxyIpPort in proxyIpPortArray) {
                     if(!Utils.isValidIpAndPort(proxyIpPort)) {
                         continue

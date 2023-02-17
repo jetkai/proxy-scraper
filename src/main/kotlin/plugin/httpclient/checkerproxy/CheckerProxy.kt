@@ -11,6 +11,7 @@ import scraper.plugin.Plugin
 import scraper.plugin.PluginFactory
 import scraper.plugin.hook.ProxyData
 import scraper.plugin.hook.ProxyWebsite
+import scraper.scripts.Utils
 import java.net.http.HttpResponse
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -76,7 +77,7 @@ class CheckerProxy : Plugin, ProxyWebsite {
         val mapper = ObjectMapper()
         val proxyList = mapper.readValue<List<CheckerProxyData>>((data.getValue("json") as HttpResponse<String>).body())
         for(proxy in proxyList) {
-            if(proxy.host.isEmpty() || !proxy.host.contains(":")) {
+            if(!Utils.isValidIpAndPort(proxy.host)) {
                 continue
             }
             val ip = proxy.host.split(":")[0]

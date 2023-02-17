@@ -56,6 +56,7 @@ class Main {
         if(!outputPath.exists()) {
             Files.createDirectory(outputPath)
         }
+
         val entries = mapOf(
             proxyList.http to Path.of("$outputPath/http.txt"),
             proxyList.https to Path.of("$outputPath/https.txt"),
@@ -63,9 +64,11 @@ class Main {
             proxyList.socks5 to Path.of("$outputPath/socks5.txt"),
             allProxies to Path.of("$outputPath/proxies.txt"),
         )
+
         entries.iterator().forEach { entry ->
             Files.write(entry.value, entry.key)
         }
+
         val jsonFile = Path.of("$outputPath/proxies.json").toFile()
         mapper.writeValue(jsonFile, proxyList)
     }
