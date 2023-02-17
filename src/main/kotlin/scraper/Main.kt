@@ -10,15 +10,13 @@ import kotlin.system.exitProcess
 
 class Main {
 
-    private val windowsOutputPath = Path.of("proxies")
-    //TODO - Update this path
-    private val linuxOutputPath = Path.of("/home/proxybuilder/IntelliJProjects/proxy-builder-2/proxies")
-
-    private val isWindows = System.getProperty("os.name").startsWith("Windows")
-
     companion object {
+        var outputPath = Path.of("proxies")
         @JvmStatic
         fun main(args : Array<String>) {
+            if(args.contentToString().contains("proxybuilder")) {
+                outputPath = Path.of("/home/proxybuilder/IntelliJProjects/proxy-builder-2/proxies")
+            }
             Main().init()
         }
     }
@@ -34,12 +32,6 @@ class Main {
 
     private fun output() {
         val mapper = ObjectMapper()
-
-        val path : Path = if(isWindows) {
-            windowsOutputPath
-        } else {
-            linuxOutputPath
-        }
 
         val proxyList = ProxyOutputData(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
 
@@ -61,20 +53,20 @@ class Main {
         allProxies.addAll(proxyList.socks4)
         allProxies.addAll(proxyList.socks5)
 
-        if(!path.exists()) {
-            Files.createDirectory(path)
+        if(!outputPath.exists()) {
+            Files.createDirectory(outputPath)
         }
         val entries = mapOf(
-            proxyList.http to Path.of("$path/http.txt"),
-            proxyList.https to Path.of("$path/https.txt"),
-            proxyList.socks4 to Path.of("$path/socks4.txt"),
-            proxyList.socks5 to Path.of("$path/socks5.txt"),
-            allProxies to Path.of("$path/proxies.txt"),
+            proxyList.http to Path.of("$outputPath/http.txt"),
+            proxyList.https to Path.of("$outputPath/https.txt"),
+            proxyList.socks4 to Path.of("$outputPath/socks4.txt"),
+            proxyList.socks5 to Path.of("$outputPath/socks5.txt"),
+            allProxies to Path.of("$outputPath/proxies.txt"),
         )
         entries.iterator().forEach { entry ->
             Files.write(entry.value, entry.key)
         }
-        val jsonFile = Path.of("$path/proxies.json").toFile()
+        val jsonFile = Path.of("$outputPath/proxies.json").toFile()
         mapper.writeValue(jsonFile, proxyList)
     }
 
