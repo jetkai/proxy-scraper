@@ -87,6 +87,10 @@ class Main {
 
         val jsonFile = Path.of("$outputPath/proxies.json").toFile()
         mapper.writeValue(jsonFile, proxyList)
+
+        logger.info { "Total unique proxies collected: ${allProxies.size}" }
+        logger.info { "HTTP:[${proxyList.http.size}] | HTTPS:[${proxyList.https.size}] " +
+                "| SOCKS4:[${proxyList.socks4.size}] | SOCKS5:[${proxyList.socks5.size}]" }
     }
 
 }

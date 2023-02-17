@@ -47,7 +47,6 @@ launch4j {
     version = "1.0"
     textVersion = "1.0"
     language = "ENGLISH_UK"
-    //icon = "${projectDir}/icons/myApp.ico"
 }
 
 lateinit var jarFile: File
@@ -55,14 +54,10 @@ lateinit var jarFile: File
 tasks.withType<Jar> {
     archiveFileName.set("proxy-scraper.jar")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    // Otherwise you'll get a "No main manifest attribute" error
     manifest {
         attributes["Main-Class"] = "scraper/Main"
     }
-
-    // To add all of the dependencies otherwise a "NoClassDefFoundError" error
     from(sourceSets.main.get().output)
-
     dependsOn(configurations.runtimeClasspath)
     from({
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
