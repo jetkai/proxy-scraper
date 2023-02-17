@@ -9,8 +9,8 @@ import mu.KotlinLogging
 import scraper.net.CoroutinesHttpClient
 import scraper.plugin.Plugin
 import scraper.plugin.PluginFactory
-import scraper.plugin.hook.ProxyData
 import scraper.plugin.hook.ProxyWebsite
+import scraper.util.data.ProxyData
 import java.net.http.HttpResponse
 
 /**

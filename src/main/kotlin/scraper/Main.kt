@@ -3,8 +3,8 @@ package scraper
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
 import scraper.plugin.PluginFactory
-import scraper.plugin.hook.ProxyOutputData
-import scraper.threading.ScraperExecutor
+import scraper.util.ScraperExecutor
+import scraper.util.data.ProxyOutputData
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.exists

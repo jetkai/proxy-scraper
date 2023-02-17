@@ -1,4 +1,4 @@
-package scraper.plugin.hook
+package scraper.util.data
 
 data class ProxyOutputData(
     val http : MutableList<String>,

@@ -9,9 +9,9 @@ import mu.KotlinLogging
 import scraper.net.CoroutinesHttpClient
 import scraper.plugin.Plugin
 import scraper.plugin.PluginFactory
-import scraper.plugin.hook.ProxyData
 import scraper.plugin.hook.ProxyWebsite
 import scraper.util.NetworkUtils
+import scraper.util.data.ProxyData
 import java.net.http.HttpResponse
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

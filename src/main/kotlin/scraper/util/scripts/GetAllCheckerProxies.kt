@@ -1,4 +1,4 @@
-package scraper.scripts
+package scraper.util.scripts
 
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -8,8 +8,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import plugin.httpclient.checkerproxy.CheckerProxyData
 import scraper.net.CoroutinesHttpClient
-import scraper.plugin.hook.ProxyData
-import scraper.plugin.hook.ProxyOutputData
+import scraper.util.data.ProxyData
+import scraper.util.data.ProxyOutputData
 import java.net.http.HttpResponse
 import java.nio.file.Files
 import java.nio.file.Path
