@@ -18,6 +18,9 @@ Output Files (After Running)
 - `/proxies/proxies.txt`
 - `/proxies/proxies.json`
 
+![image](https://user-images.githubusercontent.com/26250917/219645876-df1a6609-c75d-479a-aa60-146d8a4847bc.png)
+
+
 Compile Requirements:
 ---
 ☑️ Kotlin 1.8.10
