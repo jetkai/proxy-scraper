@@ -1,4 +1,4 @@
-package scraper.threadding
+package scraper.threading
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

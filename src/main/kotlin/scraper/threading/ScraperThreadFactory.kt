@@ -1,4 +1,4 @@
-package scraper.threadding
+package scraper.threading
 
 import java.util.concurrent.ThreadFactory
 import java.util.concurrent.atomic.AtomicInteger
